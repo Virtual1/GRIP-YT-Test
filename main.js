@@ -107,11 +107,54 @@ function getChannel(channel) {
                 <a class="btn grey darken-2" target="_blank" href="https://youtube.com/${channel.snippet.customUrl}">Visit Channel</a>
             `;
                 showChannelData(output);
+
+                const playlistId = channel.contentDetails.relatedPlaylists.uploads;
+                requestVideoPlaylist(playlistId);
+
         })
         .catch(err => alert('No Channel By That Name'));
+
 }
 
-// Add commas to number
+// Add formatting commas to number
 function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-  }
+}
+
+// Get video playlist
+function requestVideoPlaylist(playlistId) {
+    const requestOptions = {
+        playlistId: playlistId,
+        part: 'snippet',
+        maxResults: 10
+    }
+
+    const request = gapi.client.youtube.playlistItems.list(requestOptions);
+
+    request.execute(response => {
+        console.log(response);
+
+        const playlistItems = response.result.items;
+        if (playlistItems) {
+            let output = '<br><h4 class="center-align">Latest Videos</h4>;
+
+            // Loop thought the videos and append to output
+            playlistItems.forEach(item => {
+                const videoId = item.snippet.resourceId.videoId;
+
+                output += `
+                <div class="col s3">
+                <iframe width="100%" height="auto" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                </div>
+                `;
+
+            });
+
+// output videos
+            videoContainer.innerHTML = output;
+
+        } else {
+            videoContainer.innerHTML = 'No Uploaded Videos';
+        }
+    });
+}
