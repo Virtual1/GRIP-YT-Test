@@ -95,8 +95,7 @@ function getChannel(channel) {
                 </ul>
                     <p>${channel.snippet.description}</p>
                 <hr>
-                <a class=btn grey darken-2" target="_blank" href="https:/>/youtube.com/${channel.snippet.custonUrl
-                }">Visit Channel</a>
+                <a class="btn grey darken-2" target="_blank" href="https://youtube.com/${channel.snippet.customUrl}">Visit Channel</a>
             `;
                 showChannelData(output);
         })
