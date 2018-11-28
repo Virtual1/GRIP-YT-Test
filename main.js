@@ -20,6 +20,15 @@ const videoContainer = document.getElementById('video-container');
 // define default channel to show info - Traversy Media
 const defaultChannel = 'techguyweb';
 
+// Form submit and change channel
+channelForm.addEventListener('submit', e => {
+    e.preventDefault();
+
+    const channel = channelInput.value;
+
+    getChannel(channel);
+});
+
 // Load auth2 library
 function handleClientLoad() {
     gapi.load('client:auth2', initClient);
@@ -89,9 +98,9 @@ function getChannel(channel) {
                 <ul class="collection">
                     <li class="collection-item">Title: ${channel.snippet.title}</li>
                     <li class="collection-item">ID: ${channel.id}</li>
-                    <li class="collection-item">Subscribers: ${channel.statistics.subscriberCount}</li>
-                    <li class="collection-item">Views: ${channel.statistics.viewCount}</li>
-                    <li class="collection-item">Videos: ${channel.statistics.videoCount}</li>
+                    <li class="collection-item">Subscribers: ${numberWithCommas(channel.statistics.subscriberCount)}</li>
+                    <li class="collection-item">Views: ${numberWithCommas(channel.statistics.viewCount)}</li>
+                    <li class="collection-item">Videos: ${numberWithCommas(channel.statistics.videoCount)}</li>
                 </ul>
                     <p>${channel.snippet.description}</p>
                 <hr>
@@ -101,3 +110,8 @@ function getChannel(channel) {
         })
         .catch(err => alert('No Channel By That Name'));
 }
+
+// Add commas to number
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
